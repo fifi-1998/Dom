@@ -1,51 +1,44 @@
-var btnplus = document.getElementsByClassName("fa-square-plus");
-var btnmines = document.getElementsByClassName("fa-square-minus");
-var btnsupp = document.getElementsByClassName("fa-trash-can");
-var btnheart = document.querySelectorAll(".fa-heart");
-// console.log(btnheart);
+let products = document.getElementsByClassName("product");
 
-// btnplus[0].addEventListener("click" , function() {
-//   qtt[0].nextElementSibling.innerHTML++;
-// })
-
-for (let i = 0; i < btnplus.length; i++) {
-  btnplus[i].addEventListener("click", function () {
-    btnplus[i].nextElementSibling.innerHTML++;
-    Total();
-  });
-}
-for (let i = 0; i < btnmines.length; i++) {
-  btnmines[i].addEventListener("click", function () {
-    if (btnmines[i].previousElementSibling.innerHTML > 0) {
-      btnmines[i].previousElementSibling.innerHTML--;
-    }
-    Total();
-  });
-}
-
-for (let btnsupp of btnsupp) {
-    btnsupp.addEventListener("click", function () {
-      btnsupp.parentElement.parentElement.parentElement.remove();
-      Total();
-    });
-}
-for (let i =0 ; i< btnheart.length; i++){
-  btnheart[i].addEventListener("click" , function(){
-    btnheart[i].classList.toggle("toggleHeart");
-  })
-}
-// for (let btnheart of btnheart) {
-//   btnheart.addEventListener("click", function () {
-//     btnheart.classList.toggle("toggleHeart");
-//   });
-// }
-function Total() {
-  let itemPrices = document.getElementsByClassName("prix");
-  let itemQties = document.getElementsByClassName("quantite");
-  let totalPrice = document.querySelector(".total-price");
-  let total = 0;
-  for (let i = 0; i < itemPrices.length; i++) {
-    total += itemPrices[i].innerHTML * itemQties[i].innerHTML;
+function sum() {
+  let sum = document.getElementById("tot");
+  let arr = document.getElementsByClassName("price");
+  sum.innerText = 0;
+  for (x of arr) {
+    let txt = x.innerText;
+    sum.innerText =
+      Number(sum.innerText) + Number(txt.substring(0, txt.length - 1));
   }
-  return (totalPrice.innerHTML = total);
+}
+sum();
+
+for (let i = 0; i < products.length; i++) {
+  let elem = products[i];
+  let pu = elem.querySelector(".pu").innerText;
+  elem.addEventListener("click", e => {
+    switch (e.target.className) {
+      case "fas fa-heart":
+      case "fas fa-heart red":
+        e.target.classList.toggle("red");
+        break;
+      case "remove":
+        elem.remove();
+        break;
+      case "plus":
+        elem.querySelector(".qt").innerText++;
+
+        elem.querySelector(".price").innerText =
+          pu * elem.querySelector(".qt").innerText + "$";
+        sum();
+        break;
+      case "minus":
+        if (elem.querySelector(".qt").innerText > 0) {
+          elem.querySelector(".qt").innerText--;
+          elem.querySelector(".price").innerText =
+            pu * elem.querySelector(".qt").innerText + "$";
+          sum();
+        }
+        break;
+    }
+  });
 }
